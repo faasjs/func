@@ -2,16 +2,19 @@ import { Logger } from '@faasjs/utils';
 
 class Step {
   public id: string;
-  public beforeBuild?: (buildConfig: any) => void;
-  public onBuild?: (buildConfig: any) => any;
-  public afterBuild?: (buildResult: any, buildConfig: any) => void;
-  public beforeDeploy?: (deployer: any) => void;
-  public onDeploy?: (deployer: any) => void;
-  public afterDeploy?: (deployer: any) => void;
-  public afterMount?: () => void;
-  public beforeInvoke?: (event: any, context: any) => void;
-  public onInvoke: (event: any, context: any) => void;
-  public afterInvoke?: (event: any, context: any, output: any) => void;
+  public logger: Logger;
+  public hooks: {
+    beforeBuild?: (buildConfig: any) => void;
+    onBuild?: (buildConfig: any) => any;
+    afterBuild?: (buildResult: any, buildConfig: any) => void;
+    beforeDeploy?: (deployer: any) => void;
+    onDeploy?: (deployer: any) => void;
+    afterDeploy?: (deployer: any) => void;
+    afterMount?: () => void;
+    beforeInvoke?: (event: any, context: any) => void;
+    onInvoke: (event: any, context: any) => void;
+    afterInvoke?: (event: any, context: any, output: any) => void;
+  };
 
   /**
    * 标准版创建步骤类
@@ -32,26 +35,14 @@ class Step {
    * 
    * export default new Step({
    *   id: 'demo',
-   *   onInvoke: (event, context) => {
+   *   onInvoke(event, context) {
    *     console.log(event);
    *     return 'Hello world!';
    *   }
    * })
    */
-  constructor({
-    id,
-    beforeBuild,
-    onBuild,
-    afterBuild,
-    beforeDeploy,
-    onDeploy,
-    afterDeploy,
-    afterMount,
-    beforeInvoke,
-    onInvoke,
-    afterInvoke,
-  }: {
-    id?: string
+  constructor(options: {
+    id: string
     beforeBuild?: (buildConfig: any) => void,
     onBuild?: (buildConfig: any) => any,
     afterBuild?: (buildResult: any, buildConfig: any) => void,
@@ -63,78 +54,31 @@ class Step {
     onInvoke: (event: any, context: any) => void,
     afterInvoke?: (result: any, event: any, context: any) => void,
   }) {
-    const logger = new Logger('faasjs.step');
-
-    if (id) {
-      this.id = id;
-    } else {
-      throw Error('id is not defined');
-    }
-
-    logger.label = 'faasjs.step.' + this.id;
-    logger.debug('constructor');
-
-    if (beforeBuild) {
-      this.beforeBuild = beforeBuild;
-    }
-
-    if (onBuild) {
-      this.onBuild = onBuild;
-    }
-
-    if (afterBuild) {
-      this.afterBuild = afterBuild;
-    }
-
-    if (beforeDeploy) {
-      this.beforeDeploy = beforeDeploy;
-    }
-
-    if (onDeploy) {
-      this.onDeploy = onDeploy;
-    }
-
-    if (afterDeploy) {
-      this.afterDeploy = afterDeploy;
-    }
-
-    if (afterMount) {
-      this.afterMount = afterMount;
-    }
-
-    if (beforeInvoke) {
-      this.beforeInvoke = beforeInvoke;
-    }
-
-    if (onInvoke) {
-      this.onInvoke = onInvoke;
-    } else {
-      throw Error('onInvoke is not defined');
-    }
-
-    if (afterInvoke) {
-      this.afterInvoke = afterInvoke;
-    }
+    this.id = options.id;
+    delete options.id;
+    this.hooks = options;
+    this.logger = new Logger('faasjs.step');
+    this.logger.debug('constructor');
   }
 
   public async invoke(event: any, context?: any) {
     const logger = new Logger('faasjs.step');
     logger.debug('invoke %o %o', event, context);
 
-    if (!this.onInvoke) { throw Error('onInvoke is not defined'); }
+    if (!this.hooks.onInvoke) { throw Error('onInvoke is not defined'); }
 
     try {
-      if (this.beforeInvoke) {
+      if (this.hooks.beforeInvoke) {
         logger.debug('beforeInvoke');
-        await this.beforeInvoke(event, context);
+        await this.hooks.beforeInvoke.call(this, event, context);
       }
 
       logger.debug('onInvoke');
-      const res = await this.onInvoke(event, context);
+      const res = await this.hooks.onInvoke.call(this, event, context);
 
-      if (this.afterInvoke) {
+      if (this.hooks.afterInvoke) {
         logger.debug('afterInvoke');
-        await this.afterInvoke(res, event, context);
+        await this.hooks.afterInvoke.call(this, res, event, context);
       }
 
       return res;
@@ -153,7 +97,7 @@ class Step {
  * @example
  * import step from '@faasjs/step';
  * 
- * export default step('demo', (event, context) => {
+ * export default step('demo', function(event, context) {
  *   console.log(event);
  *   return 'Hello world!'
  * });
