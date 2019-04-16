@@ -24,7 +24,7 @@
 ```typescript
 import step from '@faasjs/step';
 
-export default step('demo', (event, context) => {
+export default step('demo', function(event, context) {
   console.log(event);
   return 'Hello world!'
 });
@@ -37,7 +37,7 @@ import { Step } from '@faasjs/step';
 
 export default new Step({
   id: 'demo',
-  onInvoke: (event, context) => {
+  onInvoke(event, context) {
     console.log(event);
     return 'Hello world!';
   }
