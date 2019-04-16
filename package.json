@@ -1,0 +1,53 @@
+{
+  "name": "@faasjs/step",
+  "version": "0.0.0-alpha.0",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "lint": "tslint -p tsconfig.json --fix",
+    "build": "tsc",
+    "test": "jest --expand --passWithNoTests",
+    "doc": "jsdoc2md --files ./src/*.ts --configure ./jsdoc2md.json > ./API.md",
+    "ci": "yarn test && yarn lint && rm -rf ./lib && yarn build && yarn doc"
+  },
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "@faasjs/utils": "file:../faasjs-utils"
+  },
+  "devDependencies": {
+    "@babel/core": "*",
+    "@babel/plugin-proposal-class-properties": "*",
+    "@babel/preset-env": "*",
+    "@babel/preset-typescript": "*",
+    "@types/debug": "*",
+    "@types/jest": "*",
+    "@types/node": "*",
+    "babel-jest": "*",
+    "jsdoc-babel": "*",
+    "jsdoc-to-markdown": "*",
+    "tslint": "*",
+    "typescript": "*"
+  },
+  "jest": {
+    "testRegex": "/*\\.test\\.ts$",
+    "testPathIgnorePatterns": [
+      "/lib/",
+      "/tmp/"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/lib/",
+      "/tmp/"
+    ],
+    "modulePathIgnorePatterns": [
+      "/lib/",
+      "/tmp/"
+    ],
+    "watchPathIgnorePatterns": [
+      "/lib/",
+      "/tmp/"
+    ]
+  }
+}
