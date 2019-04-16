@@ -1,25 +1,5 @@
 import { Logger } from '@faasjs/utils';
 
-/**
- * 创建步骤
- * 
- * 一个步骤对应一个云函数，生命周期为：
- * 
- * 构建 Build -> 部署 Deploy -> 加载 Mount -> 触发 Invoke
- *
- * 支持的钩子及其触发顺序如下：
- * * beforeBuild
- * * onBuild
- * * afterBuild
- * * beforeDeploy
- * * onDeploy
- * * afterDeploy
- * * afterMount
- * * beforeInvoke
- * * onInvoke
- * * afterInvoke
- */
-
 class Step {
   public id: string;
   public beforeBuild?: (buildConfig: any) => void;
