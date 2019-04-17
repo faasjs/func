@@ -29,7 +29,8 @@
     "jsdoc-babel": "*",
     "jsdoc-to-markdown": "*",
     "tslint": "*",
-    "typescript": "*"
+    "typescript": "*",
+    "jest": "*"
   },
   "jest": {
     "collectCoverage": true,
