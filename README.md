@@ -2,6 +2,11 @@
 
 云函数模块。
 
+[![License: MIT](hhttps://img.shields.io/npm/l/@faasjs/func.svg)](https://github.com/faasjs/func/blob/master/LICENSE)
+[![Build Status](https://img.shields.io/travis/com/faasjs/func.svg)](https://travis-ci.com/faasjs/func)
+[![Coverage Status](https://img.shields.io/codecov/c/github/faasjs/func.svg)](https://codecov.io/gh/faasjs/func)
+[![NPM Version](https://img.shields.io/npm/v/@faasjs/func.svg)](https://www.npmjs.com/package/@faasjs/func)
+
 云函数的生命周期为：
 
 `构建 Build -> 部署 Deploy -> 加载 Mount -> 触发 Invoke`

@@ -649,8 +649,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@faasjs/utils@file:../faasjs-utils":
+"@faasjs/utils@*":
   version "0.0.0-alpha.0"
+  resolved "http://registry.npm.taobao.org/@faasjs/utils/download/@faasjs/utils-0.0.0-alpha.0.tgz#adcabe3ee0be354d4caf72ac89dbd46ceb773ec4"
+  integrity sha1-rcq+PuC+NU1Mr3KsidvUbOt3PsQ=
 
 "@jest/console@^24.7.1":
   version "24.7.1"

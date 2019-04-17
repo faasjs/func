@@ -9,13 +9,14 @@
     "build": "tsc",
     "test": "jest --expand --passWithNoTests",
     "doc": "jsdoc2md --files ./lib/*.js > ./API.md",
-    "ci": "yarn test && yarn lint && rm -rf ./lib && yarn build && yarn doc"
+    "ci": "yarn lint && yarn test",
+    "commit": "yarn ci && rm -rf ./lib && yarn build && yarn doc"
   },
   "files": [
     "lib"
   ],
   "dependencies": {
-    "@faasjs/utils": "file:../faasjs-utils"
+    "@faasjs/utils": "*"
   },
   "devDependencies": {
     "@babel/core": "*",
@@ -31,6 +32,7 @@
     "typescript": "*"
   },
   "jest": {
+    "collectCoverage": true,
     "testRegex": "/*\\.test\\.ts$",
     "testPathIgnorePatterns": [
       "/lib/",
