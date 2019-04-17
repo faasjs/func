@@ -1,7 +1,7 @@
 import { Logger } from '@faasjs/utils';
 
-class Step {
-  public id: string;
+class Func {
+  public name: string;
   public logger: Logger;
   public hooks: {
     beforeBuild?: (buildConfig: any) => void;
@@ -17,9 +17,9 @@ class Step {
   };
 
   /**
-   * 标准版创建步骤类
+   * 云函数类
    * @param options {object} 配置项
-   * @param options.id {string} 步骤 ID
+   * @param options.name {string} 云函数名
    * @param options.beforeBuild {function=} 构建前执行的函数
    * @param options.onBuild {function=} 构建时执行函数，未定义则执行默认构建函数
    * @param options.afterBuild {function=} 构建后执行的函数
@@ -31,18 +31,18 @@ class Step {
    * @param options.onInvoke {function} 触发时执行的函数
    * @param options.afterInvoke {function=} 触发后执行的函数
    * @example
-   * import { Step } from '@faasjs/step';
+   * import { Func } from '@faasjs/func';
    * 
-   * export default new Step({
+   * export default new Func({
    *   id: 'demo',
    *   onInvoke(event, context) {
-   *     console.log(event);
+   *     this.logger.info(event);
    *     return 'Hello world!';
    *   }
    * })
    */
   constructor(options: {
-    id: string
+    name: string
     beforeBuild?: (buildConfig: any) => void,
     onBuild?: (buildConfig: any) => any,
     afterBuild?: (buildResult: any, buildConfig: any) => void,
@@ -54,15 +54,15 @@ class Step {
     onInvoke: (event: any, context: any) => void,
     afterInvoke?: (result: any, event: any, context: any) => void,
   }) {
-    this.id = options.id;
-    delete options.id;
+    this.name = options.name;
+    delete options.name;
     this.hooks = options;
-    this.logger = new Logger('faasjs.step');
+    this.logger = new Logger('faasjs.func');
     this.logger.debug('constructor');
   }
 
   public async invoke(event: any, context?: any) {
-    const logger = new Logger('faasjs.step');
+    const logger = new Logger('faasjs.func');
     logger.debug('invoke %o %o', event, context);
 
     if (!this.hooks.onInvoke) { throw Error('onInvoke is not defined'); }
@@ -90,19 +90,19 @@ class Step {
 }
 
 /**
- * 简化版的新建步骤函数
- * @param id {string} 步骤 ID
+ * 简化版的新建云函数
+ * @param name {string} 云函数名字
  * @param onInvoke {function} 步骤触发时执行的函数
  * @param options {object=} 同完整版的触发函数
  * @example
- * import step from '@faasjs/step';
+ * import func from '@faasjs/func';
  * 
- * export default step('demo', function(event, context) {
- *   console.log(event);
+ * export default func('demo', function(event, context) {
+ *   this.logger.info(event);
  *   return 'Hello world!'
  * });
  */
-const step = (id: string, onInvoke: (event: any, context: any) => void, options?: {
+const func = (name: string, onInvoke: (event: any, context: any) => void, options?: {
   beforeBuild?: (buildConfig: any) => void,
   onBuild?: (buildConfig: any) => any,
   afterBuild?: (buildResult: any, buildConfig: any) => void,
@@ -114,14 +114,14 @@ const step = (id: string, onInvoke: (event: any, context: any) => void, options?
   afterInvoke?: (result: any, event: any, context: any) => void,
 }) => {
   if (options) {
-    return new Step({ ...{ id, onInvoke }, ...options });
+    return new Func({ ...{ name, onInvoke }, ...options });
   }
-  return new Step({ id, onInvoke });
+  return new Func({ name, onInvoke });
 };
 
 export {
-  Step,
-  step,
+  Func,
+  func,
 };
 
-export default step;
+export default func;

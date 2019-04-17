@@ -1,5 +1,5 @@
 {
-  "name": "@faasjs/step",
+  "name": "@faasjs/func",
   "version": "0.0.0-alpha.0",
   "license": "MIT",
   "main": "lib/index.js",
@@ -19,7 +19,6 @@
   },
   "devDependencies": {
     "@babel/core": "*",
-    "@babel/plugin-proposal-class-properties": "*",
     "@babel/preset-env": "*",
     "@babel/preset-typescript": "*",
     "@types/debug": "*",

@@ -1,8 +1,8 @@
-import basic from './steps/func.step';
+import basic from './functions/func.func';
 
 describe('basic', () => {
   test('should work', async () => {
-    expect(basic.id).toEqual('func');
+    expect(basic.name).toEqual('func');
     expect(await basic.invoke('bro!')).toEqual('Hey, bro!');
   });
 

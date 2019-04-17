@@ -1,8 +1,8 @@
-# @faasjs/step
+# @faasjs/func
 
-步骤模块。
+云函数模块。
 
-一个步骤对应一个云函数，生命周期为：
+云函数的生命周期为：
 
 `构建 Build -> 部署 Deploy -> 加载 Mount -> 触发 Invoke`
 
@@ -19,13 +19,13 @@
 * onInvoke
 * afterInvoke
 
-## 简化版创建步骤
+## 通过简化函数创建云函数
 
 ```typescript
-import step from '@faasjs/step';
+import func from '@faasjs/func';
 
-export default step('demo', function(event, context) {
-  console.log(event);
+export default func('demo', function(event, context) {
+  this.logger.info(event);
   return 'Hello world!'
 });
 ```
@@ -33,13 +33,17 @@ export default step('demo', function(event, context) {
 ## 标准版创建步骤
 
 ```typescript
-import { Step } from '@faasjs/step';
+import { Func } from '@faasjs/func';
 
-export default new Step({
+export default new Func({
   id: 'demo',
   onInvoke(event, context) {
-    console.log(event);
+    this.logger.info(event);
     return 'Hello world!';
   }
 })
 ```
+
+## 接口文档
+
+见 [API.md](https://github.com/faasjs/func/blob/master/API.md)

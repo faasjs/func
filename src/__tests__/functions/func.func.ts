@@ -1,6 +1,6 @@
-import step from '../../index';
+import func from '../../index';
 
-export default step('func', function (input) {
+export default func('func', function (input) {
   if (typeof input !== 'string') {
     throw Error('wrong input type');
   }
