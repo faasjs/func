@@ -16,7 +16,7 @@
     "lib"
   ],
   "dependencies": {
-    "@faasjs/utils": "*"
+    "@faasjs/utils": "0.0.0-alpha.0"
   },
   "devDependencies": {
     "@babel/core": "*",
