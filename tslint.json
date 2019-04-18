@@ -12,6 +12,13 @@
     "no-trailing-whitespace": [
       true,
       "ignore-comments"
+    ],
+    "only-arrow-functions": false,
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "always"
+      }
     ]
   },
   "rulesDirectory": []

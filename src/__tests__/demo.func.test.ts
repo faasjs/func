@@ -1,4 +1,4 @@
-import basic from './functions/func.func';
+import basic from './functions/demo.func';
 
 describe('basic', () => {
   test('should work', async () => {
@@ -7,6 +7,6 @@ describe('basic', () => {
   });
 
   test('should throw', async () => {
-    expect(basic.invoke(0)).rejects.toEqual(Error('wrong input type'));
+    expect(basic.invoke(0)).rejects.toEqual(Error('Who are you?'));
   });
 });

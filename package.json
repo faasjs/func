@@ -1,6 +1,6 @@
 {
   "name": "@faasjs/func",
-  "version": "0.0.0-alpha.0",
+  "version": "0.0.0-alpha.2",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,11 +26,11 @@
     "@types/jest": "*",
     "@types/node": "*",
     "babel-jest": "*",
+    "jest": "*",
     "jsdoc-babel": "*",
     "jsdoc-to-markdown": "*",
     "tslint": "*",
-    "typescript": "*",
-    "jest": "*"
+    "typescript": "*"
   },
   "jest": {
     "collectCoverage": true,
@@ -41,7 +41,8 @@
     ],
     "coveragePathIgnorePatterns": [
       "/lib/",
-      "/tmp/"
+      "/tmp/",
+      "/__tests__/"
     ],
     "modulePathIgnorePatterns": [
       "/lib/",

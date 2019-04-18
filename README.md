@@ -7,11 +7,35 @@
 [![Coverage Status](https://img.shields.io/codecov/c/github/faasjs/func.svg)](https://codecov.io/gh/faasjs/func)
 [![NPM Version](https://img.shields.io/npm/v/@faasjs/func.svg)](https://www.npmjs.com/package/@faasjs/func)
 
-云函数的生命周期为：
+## 创建云函数
+
+```typescript
+import func from '@faasjs/func';
+
+export default func('demo', function(event, context) {
+  this.logger.info(event);
+  return 'Hello world!'
+});
+```
+
+### 监听事件
+
+```typescript
+import func from '@faasjs/func';
+
+export default func('demo', function(event, context) {
+  this.logger.info(event);
+  return 'Hello world!'
+}).on('beforeInvoke', function(event) {
+  if(typeof event === 'undefined') throw Error('event 不能为空');
+});
+```
+
+## 云函数的生命周期
 
 `构建 Build -> 部署 Deploy -> 加载 Mount -> 触发 Invoke`
 
-支持的钩子及其触发顺序如下：
+### 支持的事件及其触发顺序
 
 * beforeBuild
 * onBuild
@@ -23,31 +47,6 @@
 * beforeInvoke
 * onInvoke
 * afterInvoke
-
-## 通过简化函数创建云函数
-
-```typescript
-import func from '@faasjs/func';
-
-export default func('demo', function(event, context) {
-  this.logger.info(event);
-  return 'Hello world!'
-});
-```
-
-## 标准版创建步骤
-
-```typescript
-import { Func } from '@faasjs/func';
-
-export default new Func({
-  id: 'demo',
-  onInvoke(event, context) {
-    this.logger.info(event);
-    return 'Hello world!';
-  }
-})
-```
 
 ## 接口文档
 
