@@ -649,10 +649,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@faasjs/utils@0.0.0-alpha.0":
-  version "0.0.0-alpha.0"
-  resolved "http://registry.npm.taobao.org/@faasjs/utils/download/@faasjs/utils-0.0.0-alpha.0.tgz#adcabe3ee0be354d4caf72ac89dbd46ceb773ec4"
-  integrity sha1-rcq+PuC+NU1Mr3KsidvUbOt3PsQ=
+"@faasjs/utils@0.0.0-alpha.2":
+  version "0.0.0-alpha.2"
+  resolved "http://registry.npm.taobao.org/@faasjs/utils/download/@faasjs/utils-0.0.0-alpha.2.tgz?cache=0&other_urls=http%3A%2F%2Fregistry.npm.taobao.org%2F%40faasjs%2Futils%2Fdownload%2F%40faasjs%2Futils-0.0.0-alpha.2.tgz#72f0bdbc8742f1cc13bf506e38c466ad675982c3"
+  integrity sha1-cvC9vIdC8cwTv1BuOMRmrWdZgsM=
 
 "@jest/console@^24.7.1":
   version "24.7.1"

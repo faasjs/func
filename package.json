@@ -1,6 +1,6 @@
 {
   "name": "@faasjs/func",
-  "version": "0.0.0-alpha.2",
+  "version": "0.0.0-alpha.3",
   "license": "MIT",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -16,7 +16,7 @@
     "lib"
   ],
   "dependencies": {
-    "@faasjs/utils": "0.0.0-alpha.0"
+    "@faasjs/utils": "0.0.0-alpha.2"
   },
   "devDependencies": {
     "@babel/core": "*",

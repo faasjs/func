@@ -1,6 +1,6 @@
-import func from '../index';
+import func from '../../index';
 
-describe('hooks', function () {
+describe('func hooks', function () {
   test.each([
     'beforeBuild',
     'onBuild',

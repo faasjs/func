@@ -1,4 +1,4 @@
-import func from '../../index';
+import func from '../../../index';
 
 export default func('func', function (event) {
   return `Hey, ${event}`;
