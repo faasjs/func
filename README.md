@@ -37,16 +37,19 @@ export default func('demo', function(event, context) {
 
 ### 支持的事件及其触发顺序
 
-* beforeBuild
-* onBuild
-* afterBuild
-* beforeDeploy
-* onDeploy
-* afterDeploy
-* afterMount
-* beforeInvoke
-* onInvoke
-* afterInvoke
+* 构建环境
+  * beforeBuild 开始构建前，可以进行添加 NPM 包等操作
+  * onBuild
+  * afterBuild
+* 发布环境
+  * beforeDeploy
+  * onDeploy
+  * afterDeploy
+* 运行环境
+  * afterMount 实例加载后，可以进行运行环境的环境变量配置和插件初始化等操作，仅在实例加载时执行一次
+  * beforeInvoke
+  * onInvoke
+  * afterInvoke
 
 ## 接口文档
 

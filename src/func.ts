@@ -10,6 +10,7 @@ class Func {
   public events: {
     [hook: string]: Array<(...args: any) => any>,
   };
+  private mounted: boolean;
 
   /**
    * 创建云函数类
@@ -22,6 +23,7 @@ class Func {
     this.logger.debug('constructor');
     this.handler = handler;
     this.events = Object.create(null);
+    this.mounted = false;
   }
 
   /**
@@ -61,7 +63,7 @@ class Func {
    * @param args {any} 参数
    */
   public async emit(hook: string, ...args: any) {
-    this.logger.debug('emit', hook);
+    this.logger.debug('emit', hook, (this.events[hook] ? this.events[hook].length : 0));
 
     if (this.events[hook]) {
       for (const handler of this.events[hook]) {
@@ -82,6 +84,10 @@ class Func {
     logger.debug('invoke %o %o', event, context);
 
     try {
+      if (!this.mounted) {
+        await this.emit('afterMount');
+      }
+
       await this.emit('beforeInvoke', event, context);
 
       logger.debug('handler');

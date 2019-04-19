@@ -2,7 +2,7 @@ import basic from './functions/demo.func';
 
 describe('basic func', () => {
   test('should work', async () => {
-    expect(basic.name).toEqual('func');
+    expect(basic.name).toEqual('demo');
     expect(await basic.invoke('bro!')).toEqual('Hey, bro!');
   });
 
