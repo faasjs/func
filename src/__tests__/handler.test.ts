@@ -1,0 +1,30 @@
+import { Func, InvokeData } from '../func';
+
+describe('handler', function () {
+  test('no handler', function () {
+    expect(() => new Func({})).toThrowError('Unknown handler');
+  });
+
+  describe('createHanlder', function () {
+    test('should work', async function () {
+      const handler = new Func({
+        handler: function (data: InvokeData) {
+          return data.event + 1;
+        }
+      }).createHandler();
+
+      expect(await handler(0)).toEqual(1);
+      expect(await handler(1)).toEqual(2);
+    });
+
+    test('throw handler', async function () {
+      const handler = new Func({
+        handler: function () {
+          throw Error('Error');
+        }
+      }).createHandler();
+
+      expect(await handler({}, {})).toEqual(Error('Error'));
+    });
+  });
+});

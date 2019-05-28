@@ -5,3 +5,4 @@ package
 *.tgz
 tmp
 coverage
+.rpt2_cache

@@ -1,10 +1,11 @@
-import { faasrc, multiAssign } from './faasrc';
-import func from './func';
+import { Func, Plugin, Handler, Next, BuildData, DeployData, InvokeData } from './func';
 
 export {
-  faasrc,
-  func,
-  multiAssign,
+  Func,
+  Plugin,
+  Handler,
+  Next,
+  BuildData,
+  DeployData,
+  InvokeData
 };
-
-export default func;
