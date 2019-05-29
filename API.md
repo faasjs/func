@@ -9,7 +9,7 @@
     * [.deploy(data)](#Func+deploy)
     * [.mount()](#Func+mount)
     * [.invoke(data)](#Func+invoke)
-    * [.createHandler()](#Func+createHandler)
+    * [.export()](#Func+export)
 
 <a name="new_Func_new"></a>
 
@@ -68,9 +68,9 @@
 | --- | --- | --- |
 | data | <code>object</code> | 执行信息 |
 
-<a name="Func+createHandler"></a>
+<a name="Func+export"></a>
 
-### func.createHandler()
+### func.export()
 创建触发函数
 
 **Kind**: instance method of [<code>Func</code>](#Func)  

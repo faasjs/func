@@ -43,6 +43,7 @@ export class Func {
   public handler: Handler;
   public logger: Logger;
   private mounted: boolean;
+  [key: string]: any;
 
   /**
    * 新建流程
@@ -139,30 +140,31 @@ export class Func {
   /**
    * 创建触发函数
    */
-  public createHandler () {
-    this.logger.debug('createHandler');
-    return async (event: any, context?: any, callback?: (...args: any) => any) => {
-      this.logger.debug('event: %o', event);
-      this.logger.debug('conext: %o', context);
+  public export () {
+    return {
+      handler: async (event: any, context?: any, callback?: (...args: any) => any) => {
+        this.logger.debug('event: %o', event);
+        this.logger.debug('conext: %o', context);
 
-      // 实例未启动时执行启动函数
-      if (!this.mounted) {
-        await this.mount();
-        this.mounted = true;
+        // 实例未启动时执行启动函数
+        if (!this.mounted) {
+          await this.mount();
+          this.mounted = true;
+        }
+
+        const data: InvokeData = {
+          event,
+          context: context || {},
+          callback: callback || (() => true),
+          response: null,
+          handler: this.handler,
+          logger: this.logger
+        };
+
+        await this.invoke(data);
+
+        return data.response;
       }
-
-      const data: InvokeData = {
-        event,
-        context: context || {},
-        callback: callback || (() => true),
-        response: null,
-        handler: this.handler,
-        logger: this.logger
-      };
-
-      await this.invoke(data);
-
-      return data.response;
     };
   }
 }

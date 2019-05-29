@@ -11,7 +11,7 @@ describe('handler', function () {
         handler (data: InvokeData) {
           return data.event + 1;
         }
-      }).createHandler();
+      }).export().handler;
 
       expect(await handler(0)).toEqual(1);
       expect(await handler(1)).toEqual(2);
@@ -22,7 +22,7 @@ describe('handler', function () {
         handler () {
           throw Error('Error');
         }
-      }).createHandler();
+      }).export().handler;
 
       expect(await handler({}, {})).toEqual(Error('Error'));
     });

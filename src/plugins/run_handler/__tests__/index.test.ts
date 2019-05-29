@@ -8,7 +8,7 @@ describe('plugins.runHandler', function () {
       handler: function (data: InvokeData) {
         return data.event + 1;
       }
-    }).createHandler();
+    }).export().handler;
 
     expect(await handler(0)).toEqual(1);
     expect(await handler(1)).toEqual(2);
