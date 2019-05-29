@@ -8,7 +8,7 @@ describe('handler', function () {
   describe('createHanlder', function () {
     test('should work', async function () {
       const handler = new Func({
-        handler: function (data: InvokeData) {
+        handler (data: InvokeData) {
           return data.event + 1;
         }
       }).createHandler();
@@ -19,7 +19,7 @@ describe('handler', function () {
 
     test('throw handler', async function () {
       const handler = new Func({
-        handler: function () {
+        handler () {
           throw Error('Error');
         }
       }).createHandler();

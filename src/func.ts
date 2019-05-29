@@ -5,7 +5,9 @@ export type Handler = (data: InvokeData) => any;
 export type Next = () => Promise<void>;
 
 export interface BuildData {
+  root: string;
   filename: string;
+  env?: string;
   [key: string]: any;
 }
 
@@ -40,13 +42,15 @@ export class Func {
   public plugins: Plugin[];
   public handler: Handler;
   public logger: Logger;
-  public mounted: boolean;
+  private mounted: boolean;
 
   /**
    * 新建流程
    * @param config {object} 配置项
-   * @param config.plugins {object[]} 插件配置，若未设置，默认会使用 Sync 插件
-   * @param steps {step[]} 步骤数组
+   * @param config.plugins {Plugin[]} 插件
+   * @param config.handler {Handler} 业务函数
+   * @param config.builder {object} 构建配置项
+   * @param config.deployer {object} 部署配置项
    */
   constructor (config: {
     plugins?: Plugin[];
@@ -96,7 +100,9 @@ export class Func {
   /**
    * 构建代码包
    * @param data {object} 代码包信息
+   * @param data.root {string} 项目根目录
    * @param data.filename {string} 包括完整路径的流程文件名
+   * @param data.env {string} 环境
    */
   public build (data: BuildData) {
     this.logger.debug('onBuild');

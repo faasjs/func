@@ -4,7 +4,7 @@
 **Kind**: global class  
 
 * [Func](#Func)
-    * [new Func(config, steps)](#new_Func_new)
+    * [new Func(config)](#new_Func_new)
     * [.build(data)](#Func+build)
     * [.deploy(data)](#Func+deploy)
     * [.mount()](#Func+mount)
@@ -13,15 +13,17 @@
 
 <a name="new_Func_new"></a>
 
-### new Func(config, steps)
+### new Func(config)
 新建流程
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | config | <code>object</code> | 配置项 |
-| config.plugins | <code>Array.&lt;object&gt;</code> | 插件配置，若未设置，默认会使用 Sync 插件 |
-| steps | <code>Array.&lt;step&gt;</code> | 步骤数组 |
+| config.plugins | <code>Array.&lt;Plugin&gt;</code> | 插件 |
+| config.handler | <code>Handler</code> | 业务函数 |
+| config.builder | <code>object</code> | 构建配置项 |
+| config.deployer | <code>object</code> | 部署配置项 |
 
 <a name="Func+build"></a>
 
@@ -33,7 +35,9 @@
 | Param | Type | Description |
 | --- | --- | --- |
 | data | <code>object</code> | 代码包信息 |
+| data.root | <code>string</code> | 项目根目录 |
 | data.filename | <code>string</code> | 包括完整路径的流程文件名 |
+| data.env | <code>string</code> | 环境 |
 
 <a name="Func+deploy"></a>
 

@@ -29,7 +29,9 @@ describe('plugins', function () {
 
     results.push('begin');
     const data = {
-      filename: 'base'
+      root: '.',
+      filename: 'base',
+      env: 'testing'
     };
     await func.build(data);
     results.push('end');
