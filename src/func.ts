@@ -4,19 +4,10 @@ import RunHandler from './plugins/run_handler/index';
 export type Handler = (data: InvokeData) => any;
 export type Next = () => Promise<void>;
 
-export interface BuildData {
+export interface DeployData {
   root: string;
   filename: string;
   env?: string;
-  [key: string]: any;
-}
-
-export interface DeployData {
-  resources: {
-    [key: string]: {
-      [key: string]: any;
-    }[];
-  };
   [key: string]: any;
 }
 
@@ -31,7 +22,6 @@ export interface InvokeData {
 }
 
 export interface Plugin {
-  onBuild?: (data: BuildData, next: Next) => void;
   onDeploy?: (data: DeployData, next: Next) => void;
   onMount?: (data: {}, next: Next) => void;
   onInvoke?: (data: InvokeData, next: Next) => void;
@@ -99,21 +89,11 @@ export class Func {
   }
 
   /**
-   * 构建代码包
+   * 发布云资源
    * @param data {object} 代码包信息
    * @param data.root {string} 项目根目录
    * @param data.filename {string} 包括完整路径的流程文件名
    * @param data.env {string} 环境
-   */
-  public build (data: BuildData) {
-    this.logger.debug('onBuild');
-    return this.compose('onBuild')(data);
-  }
-
-  /**
-   * 发布云资源
-   * @param data {object} 待发布信息
-   * @param data.resources {object} 云资源信息
    */
   public deploy (data: DeployData) {
     this.logger.debug('onDeploy');

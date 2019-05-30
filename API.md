@@ -5,7 +5,6 @@
 
 * [Func](#Func)
     * [new Func(config)](#new_Func_new)
-    * [.build(data)](#Func+build)
     * [.deploy(data)](#Func+deploy)
     * [.mount()](#Func+mount)
     * [.invoke(data)](#Func+invoke)
@@ -25,20 +24,6 @@
 | config.builder | <code>object</code> | 构建配置项 |
 | config.deployer | <code>object</code> | 部署配置项 |
 
-<a name="Func+build"></a>
-
-### func.build(data)
-构建代码包
-
-**Kind**: instance method of [<code>Func</code>](#Func)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| data | <code>object</code> | 代码包信息 |
-| data.root | <code>string</code> | 项目根目录 |
-| data.filename | <code>string</code> | 包括完整路径的流程文件名 |
-| data.env | <code>string</code> | 环境 |
-
 <a name="Func+deploy"></a>
 
 ### func.deploy(data)
@@ -48,8 +33,10 @@
 
 | Param | Type | Description |
 | --- | --- | --- |
-| data | <code>object</code> | 待发布信息 |
-| data.resources | <code>object</code> | 云资源信息 |
+| data | <code>object</code> | 代码包信息 |
+| data.root | <code>string</code> | 项目根目录 |
+| data.filename | <code>string</code> | 包括完整路径的流程文件名 |
+| data.env | <code>string</code> | 环境 |
 
 <a name="Func+mount"></a>
 
