@@ -41,7 +41,7 @@ export interface DeployData {
 }
 
 export interface MountData {
-  pluginsConfig: {
+  config: {
     [key: string]: any;
   };
   [key: string]: any;
@@ -54,7 +54,7 @@ export interface InvokeData {
   response: any;
   logger: Logger;
   handler: Handler;
-  pluginsConfig: {
+  config: {
     [key: string]: any;
   };
   [key: string]: any;
@@ -71,7 +71,7 @@ export class Func {
   public plugins: Plugin[];
   public handler: Handler;
   public logger: Logger;
-  public pluginsConfig: {
+  public config: {
     [key: string]: any;
   }
   private mounted: boolean;
@@ -98,7 +98,7 @@ export class Func {
 
     this.plugins = config.plugins || [];
     this.plugins.push(new RunHandler());
-    this.pluginsConfig = Object.create(null);
+    this.config = Object.create(null);
 
     this.mounted = false;
   }
@@ -172,7 +172,7 @@ export class Func {
         // 实例未启动时执行启动函数
         if (!this.mounted) {
           await this.mount({
-            pluginsConfig: this.pluginsConfig
+            config: this.config
           });
           this.mounted = true;
         }
@@ -184,7 +184,7 @@ export class Func {
           response: null,
           handler: this.handler,
           logger: this.logger,
-          pluginsConfig: this.pluginsConfig
+          config: this.config
         };
 
         await this.invoke(data);

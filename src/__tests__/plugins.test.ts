@@ -59,7 +59,7 @@ describe('plugins', function () {
 
     results.push('begin');
     await func.mount({
-      pluginsConfig: func.pluginsConfig
+      config: func.config
     });
     results.push('end');
 
@@ -102,12 +102,12 @@ describe('plugins', function () {
       response: null,
       handler: func.handler,
       logger: func.logger,
-      pluginsConfig: func.pluginsConfig
+      config: func.config
     };
 
     results.push('begin');
     await func.mount({
-      pluginsConfig: func.pluginsConfig
+      config: func.config
     });
     await func.invoke(data);
     results.push('end');
@@ -131,7 +131,7 @@ describe('plugins', function () {
 
     try {
       await func.mount({
-        pluginsConfig: func.pluginsConfig
+        config: func.config
       });
     } catch (error) {
       expect(error.message).toEqual('next() called multiple times');
