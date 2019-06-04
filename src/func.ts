@@ -25,6 +25,7 @@ export interface DeployData {
         config?: {
           [key: string]: any;
         };
+        [key: string]: any;
       };
     };
   };
