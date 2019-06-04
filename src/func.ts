@@ -8,6 +8,41 @@ export interface DeployData {
   root: string;
   filename: string;
   env?: string;
+  name?: string;
+  config?: {
+    providers: {
+      [key: string]: {
+        type: string;
+        config: {
+          [key: string]: any;
+        };
+      };
+    };
+    plugins: {
+      [key: string]: {
+        provider?: string;
+        type: string;
+        config?: {
+          [key: string]: any;
+        };
+      };
+    };
+  };
+  version?: string;
+  dependencies?: {
+    [key: string]: string;
+  };
+  plugins?: {
+    [key: string]: Plugin[];
+  };
+  logger?: Logger;
+  [key: string]: any;
+}
+
+export interface MountData {
+  pluginsConfig: {
+    [key: string]: any;
+  };
   [key: string]: any;
 }
 
@@ -18,6 +53,9 @@ export interface InvokeData {
   response: any;
   logger: Logger;
   handler: Handler;
+  pluginsConfig: {
+    [key: string]: any;
+  };
   [key: string]: any;
 }
 
@@ -32,6 +70,9 @@ export class Func {
   public plugins: Plugin[];
   public handler: Handler;
   public logger: Logger;
+  public pluginsConfig: {
+    [key: string]: any;
+  }
   private mounted: boolean;
   [key: string]: any;
 
@@ -56,6 +97,7 @@ export class Func {
 
     this.plugins = config.plugins || [];
     this.plugins.push(new RunHandler());
+    this.pluginsConfig = Object.create(null);
 
     this.mounted = false;
   }
@@ -103,9 +145,9 @@ export class Func {
   /**
    * 启动云实例
    */
-  public mount () {
+  public mount (data: MountData) {
     this.logger.debug('onMount');
-    return this.compose('onMount')({});
+    return this.compose('onMount')(data);
   }
 
   /**
@@ -128,7 +170,9 @@ export class Func {
 
         // 实例未启动时执行启动函数
         if (!this.mounted) {
-          await this.mount();
+          await this.mount({
+            pluginsConfig: this.pluginsConfig
+          });
           this.mounted = true;
         }
 
@@ -138,7 +182,8 @@ export class Func {
           callback: callback || (() => true),
           response: null,
           handler: this.handler,
-          logger: this.logger
+          logger: this.logger,
+          pluginsConfig: this.pluginsConfig
         };
 
         await this.invoke(data);

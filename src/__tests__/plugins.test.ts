@@ -58,7 +58,9 @@ describe('plugins', function () {
     });
 
     results.push('begin');
-    await func.mount();
+    await func.mount({
+      pluginsConfig: func.pluginsConfig
+    });
     results.push('end');
 
     expect(results).toEqual(['begin', 'before1', 'before2', 'after2', 'after1', 'end']);
@@ -87,7 +89,9 @@ describe('plugins', function () {
 
     const func = new Func({
       plugins: [new P1(), new P2()],
-      handler: () => 'base'
+      handler () {
+        return 'base';
+      }
     });
 
     const data = {
@@ -97,11 +101,14 @@ describe('plugins', function () {
       callback: () => 1,
       response: null,
       handler: func.handler,
-      logger: func.logger
+      logger: func.logger,
+      pluginsConfig: func.pluginsConfig
     };
 
     results.push('begin');
-    await func.mount();
+    await func.mount({
+      pluginsConfig: func.pluginsConfig
+    });
     await func.invoke(data);
     results.push('end');
 
@@ -123,7 +130,9 @@ describe('plugins', function () {
     });
 
     try {
-      await func.mount();
+      await func.mount({
+        pluginsConfig: func.pluginsConfig
+      });
     } catch (error) {
       expect(error.message).toEqual('next() called multiple times');
     }
