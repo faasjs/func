@@ -1,4 +1,4 @@
-import { InvokeData } from '../../func';
+import { InvokeData } from '../../index';
 
 export default class RunHandler {
   public async onInvoke (data: InvokeData, next: () => void) {

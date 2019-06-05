@@ -1,4 +1,4 @@
-import { Func, InvokeData } from '../../../func';
+import { Func, InvokeData } from '../../../index';
 import RunHandler from '../index';
 
 describe('plugins.runHandler', function () {

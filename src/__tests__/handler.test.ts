@@ -1,4 +1,4 @@
-import { Func, InvokeData } from '../func';
+import { Func, InvokeData } from '../index';
 
 describe('handler', function () {
   test('no handler', function () {

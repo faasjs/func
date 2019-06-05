@@ -1,4 +1,4 @@
-import { Func, Plugin, DeployData, Next, InvokeData, MountData } from '../func';
+import { Func, Plugin, DeployData, Next, InvokeData, MountData } from '../index';
 
 describe('plugins', function () {
   test('onDeploy', async function () {
@@ -59,7 +59,9 @@ describe('plugins', function () {
 
     results.push('begin');
     await func.mount({
-      config: func.config
+      config: func.config,
+      event: null,
+      context: null
     });
     results.push('end');
 
@@ -107,7 +109,9 @@ describe('plugins', function () {
 
     results.push('begin');
     await func.mount({
-      config: func.config
+      config: func.config,
+      event: null,
+      context: null
     });
     await func.invoke(data);
     results.push('end');
@@ -131,7 +135,9 @@ describe('plugins', function () {
 
     try {
       await func.mount({
-        config: func.config
+        config: func.config,
+        event: null,
+        context: null
       });
     } catch (error) {
       expect(error.message).toEqual('next() called multiple times');
