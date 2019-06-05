@@ -62,7 +62,7 @@ export interface InvokeData {
 
 export interface Plugin {
   onDeploy?: (data: DeployData, next: Next) => void;
-  onMount?: (data: {}, next: Next) => void;
+  onMount?: (data: MountData, next: Next) => void;
   onInvoke?: (data: InvokeData, next: Next) => void;
   [key: string]: any;
 }

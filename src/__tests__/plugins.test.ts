@@ -1,4 +1,4 @@
-import { Func, Plugin, DeployData, Next, InvokeData } from '../func';
+import { Func, Plugin, DeployData, Next, InvokeData, MountData } from '../func';
 
 describe('plugins', function () {
   test('onDeploy', async function () {
@@ -118,7 +118,7 @@ describe('plugins', function () {
 
   test('call multiple times next', async function () {
     class P implements Plugin {
-      public async onMount (data: DeployData, next: Next) {
+      public async onMount (data: MountData, next: Next) {
         await next();
         await next();
       }
