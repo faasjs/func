@@ -155,7 +155,7 @@ export class Func {
   }) {
     this.logger.debug('onMount');
     if (this.mounted) {
-      this.logger.warn('has been mounted, skiped.');
+      this.logger.warn('mount() called multiple times');
       return;
     }
 
@@ -208,8 +208,8 @@ export class Func {
 
         const data: InvokeData = {
           event,
-          context: context || {},
-          callback: callback || (() => true),
+          context,
+          callback,
           response: null,
           handler: this.handler,
           logger: this.logger,
