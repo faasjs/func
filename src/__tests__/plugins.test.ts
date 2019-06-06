@@ -143,4 +143,44 @@ describe('plugins', function () {
       expect(error.message).toEqual('next() called multiple times');
     }
   });
+
+  test('error mount plugin', async function () {
+    class P implements Plugin {
+      public async onMount () {
+        throw Error('wrong');
+      }
+    }
+
+    const func = new Func({
+      plugins: [new P()],
+      handler: () => 1
+    });
+
+    try {
+      await func.export().handler(null);
+    } catch (error) {
+      expect(error.message).toEqual('wrong');
+    }
+
+    const res = await func.export().handler(null);
+
+    expect(res.message).toEqual('wrong');
+  });
+
+  test('error invoke plugin', async function () {
+    class P implements Plugin {
+      public async onInvoke () {
+        throw Error('wrong');
+      }
+    }
+
+    const func = new Func({
+      plugins: [new P()],
+      handler: () => 1
+    });
+
+    const res = await func.export().handler(null);
+
+    expect(res.message).toEqual('wrong');
+  });
 });

@@ -91,7 +91,7 @@ export class Func {
     plugins?: Plugin[];
     handler: Handler;
   }) {
-    this.logger = new Logger('func');
+    this.logger = new Logger('[Func]');
 
     if (typeof config.handler !== 'function') {
       throw Error('Unknown handler');
@@ -148,18 +148,53 @@ export class Func {
   /**
    * 启动云实例
    */
-  public mount (data: MountData) {
+  public async mount (data: {
+    event: any;
+    context: any;
+    config?: any;
+  }) {
     this.logger.debug('onMount');
-    return this.compose('onMount')(data);
+    if (this.mounted) {
+      this.logger.warn('has been mounted, skiped.');
+      return;
+    }
+
+    data.config = this.config;
+    try {
+      await this.compose('onMount')(data);
+      this.mounted = true;
+    } catch (error) {
+      throw error;
+    }
   }
 
   /**
    * 执行云函数
    * @param data {object} 执行信息
    */
-  public invoke (data: InvokeData) {
+  public async invoke (data: InvokeData) {
     this.logger.debug('onInvoke');
-    return this.compose('onInvoke')(data);
+
+    // 实例未启动时执行启动函数
+    if (!this.mounted) {
+      try {
+        await this.mount({
+          event: data.event,
+          context: data.context,
+        });
+      } catch (error) {
+        // 启动异常时回传错误对象
+        data.response = error;
+        return;
+      }
+
+    }
+    try {
+      await this.compose('onInvoke')(data);
+    } catch (error) {
+      // 执行异常时回传异常
+      data.response = error;
+    }
   }
 
   /**
@@ -170,16 +205,6 @@ export class Func {
       handler: async (event: any, context?: any, callback?: (...args: any) => any) => {
         this.logger.debug('event: %o', event);
         this.logger.debug('conext: %o', context);
-
-        // 实例未启动时执行启动函数
-        if (!this.mounted) {
-          await this.mount({
-            config: this.config,
-            event,
-            context,
-          });
-          this.mounted = true;
-        }
 
         const data: InvokeData = {
           event,
