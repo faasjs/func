@@ -4,6 +4,8 @@ describe('lifecycle', function () {
   describe('mount', function () {
     test('plugin throw error', async function () {
       class P implements Plugin {
+        public readonly type: string;
+
         public async onMount () {
           throw Error('wrong');
         }
@@ -20,15 +22,19 @@ describe('lifecycle', function () {
         expect(error.message).toEqual('wrong');
       }
 
-      const res = await func.export().handler(null);
-
-      expect(res.message).toEqual('wrong');
+      try {
+        await func.export().handler(null);
+      } catch (error) {
+        expect(error.message).toEqual('wrong');
+      }
     });
 
     test('mount called multiple times', async function () {
       let times = 0;
 
       class P implements Plugin {
+        public readonly type: string;
+
         public async onMount (data: MountData, next: Next) {
           times++;
           await next();
@@ -58,6 +64,8 @@ describe('lifecycle', function () {
   describe('invoke', function () {
     test('plugin throw error', async function () {
       class P implements Plugin {
+        public readonly type: string;
+
         public async onInvoke () {
           throw Error('wrong');
         }

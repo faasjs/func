@@ -88,6 +88,9 @@ export class Func {
     [key: string]: any;
   }
   private mounted: boolean;
+  private cachedFunctions: {
+    [key: string]: ((...args: any) => any)[];
+  }
   [key: string]: any;
 
   /**
@@ -102,7 +105,7 @@ export class Func {
     plugins?: Plugin[];
     handler: Handler;
   }) {
-    this.logger = new Logger('[Func]');
+    this.logger = new Logger('Func');
 
     if (typeof config.handler !== 'function') {
       throw Error('Unknown handler');
@@ -114,14 +117,21 @@ export class Func {
     this.config = Object.create(null);
 
     this.mounted = false;
+    this.cachedFunctions = Object.create(null);
   }
 
   public compose (key: 'onBuild' | 'onDeploy' | 'onMount' | 'onInvoke') {
     let list: ((...args: any) => any)[] = [];
-    for (const plugin of this.plugins) {
-      if (typeof plugin[key as string] === 'function') {
-        list.push(plugin[key as string].bind(plugin));
+
+    if (this.cachedFunctions[key as string]) {
+      list = this.cachedFunctions[key as string];
+    } else {
+      for (const plugin of this.plugins) {
+        if (typeof plugin[key as string] === 'function') {
+          list.push(plugin[key as string].bind(plugin));
+        }
       }
+      this.cachedFunctions[key as string] = list;
     }
 
     return function (data: any, next?: () => void) {
@@ -190,17 +200,10 @@ export class Func {
 
     // 实例未启动时执行启动函数
     if (!this.mounted) {
-      try {
-        await this.mount({
-          event: data.event,
-          context: data.context,
-        });
-      } catch (error) {
-        // 启动异常时回传错误对象
-        data.response = error;
-        return;
-      }
-
+      await this.mount({
+        event: data.event,
+        context: data.context,
+      });
     }
     try {
       await this.compose('onInvoke')(data);
