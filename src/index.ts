@@ -31,10 +31,19 @@ export interface DeployData {
   };
   version?: string;
   dependencies?: {
-    [key: string]: string;
+    [name: string]: string;
   };
   plugins?: {
-    [key: string]: Plugin[];
+    [name: string]: {
+      name?: string;
+      type: string;
+      provider?: string;
+      config: {
+        [key: string]: any;
+      };
+      plugin: Plugin;
+      [key: string]: any;
+    };
   };
   logger?: Logger;
   [key: string]: any;
@@ -63,6 +72,8 @@ export interface InvokeData {
 }
 
 export interface Plugin {
+  type: string;
+  name?: string;
   onDeploy?: (data: DeployData, next: Next) => void;
   onMount?: (data: MountData, next: Next) => void;
   onInvoke?: (data: InvokeData, next: Next) => void;
@@ -161,8 +172,10 @@ export class Func {
 
     data.config = this.config;
     try {
+      this.logger.time('mount');
       await this.compose('onMount')(data);
       this.mounted = true;
+      this.logger.timeEnd('mount', 'mounted');
     } catch (error) {
       throw error;
     }
@@ -216,7 +229,9 @@ export class Func {
           config: this.config
         };
 
+        this.logger.time('invoke');
         await this.invoke(data);
+        this.logger.timeEnd('invoke', 'invoked');
 
         return data.response;
       }
