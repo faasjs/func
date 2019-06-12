@@ -1,4 +1,4 @@
-import { Func, Plugin, Next, MountData } from '../index';
+import { Func, Plugin, Next, MountData, InvokeData } from '../index';
 
 describe('lifecycle', function () {
   describe('mount', function () {
@@ -66,19 +66,20 @@ describe('lifecycle', function () {
       class P implements Plugin {
         public readonly type: string;
 
-        public async onInvoke () {
-          throw Error('wrong');
+        public async onInvoke (data: InvokeData, next: Next) {
+          data.event.headers.cookie;
+          await next();
         }
       }
 
       const func = new Func({
-        plugins: [new P()],
+        plugins: [new P(), new P()],
         handler: () => 1
       });
 
       const res = await func.export().handler(null);
 
-      expect(res.message).toEqual('wrong');
+      expect(res.message).toEqual('Cannot read property \'headers\' of null');
     });
   });
 });

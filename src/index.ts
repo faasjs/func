@@ -209,6 +209,7 @@ export class Func {
       await this.compose('onInvoke')(data);
     } catch (error) {
       // 执行异常时回传异常
+      this.logger.error(error);
       data.response = error;
     }
   }
@@ -220,7 +221,7 @@ export class Func {
     return {
       handler: async (event: any, context?: any, callback?: (...args: any) => any) => {
         this.logger.debug('event: %o', event);
-        this.logger.debug('conext: %o', context);
+        this.logger.debug('context: %o', context);
 
         const data: InvokeData = {
           event,

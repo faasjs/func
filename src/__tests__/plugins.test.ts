@@ -4,6 +4,7 @@ describe('plugins', function () {
   test('onDeploy', async function () {
     const results = [];
     class P1 implements Plugin {
+      public readonly type: string;
       public onDeploy (data: DeployData, next: Next) {
         results.push('before1');
         next();
@@ -11,6 +12,7 @@ describe('plugins', function () {
       }
     }
     class P2 implements Plugin {
+      public readonly type: string;
       public onDeploy (data: DeployData, next: Next) {
         results.push('before2');
         next();
@@ -38,14 +40,16 @@ describe('plugins', function () {
   test('onMount', async function () {
     const results = [];
     class P1 implements Plugin {
-      public onMount (data: {}, next: Next) {
+      public readonly type: string;
+      public onMount (data: MountData, next: Next) {
         results.push('before1');
         next();
         results.push('after1');
       }
     }
     class P2 implements Plugin {
-      public onMount (data: {}, next: Next) {
+      public readonly type: string;
+      public onMount (data: MountData, next: Next) {
         results.push('before2');
         next();
         results.push('after2');
@@ -71,6 +75,7 @@ describe('plugins', function () {
   test('onInvoke', async function () {
     const results = [];
     class P1 implements Plugin {
+      public readonly type: string;
       public async onInvoke (data: InvokeData, next: Next) {
         results.push('before1');
         data.response += 'before1';
@@ -80,6 +85,7 @@ describe('plugins', function () {
       }
     }
     class P2 implements Plugin {
+      public readonly type: string;
       public async onInvoke (data: InvokeData, next: Next) {
         results.push('before2');
         data.response += 'before2';
@@ -122,6 +128,7 @@ describe('plugins', function () {
 
   test('call multiple times next', async function () {
     class P implements Plugin {
+      public readonly type: string;
       public async onMount (data: MountData, next: Next) {
         await next();
         await next();
