@@ -12,15 +12,15 @@ export default class RunHandler {
   public async onInvoke (data: InvokeData, next: () => void) {
     if (!data.runHandler) {
       data.logger.debug('[RunHandler] begin');
+      data.logger.time('RunHandler');
       try {
-        data.logger.time('RunHandler');
         data.response = await data.handler(data);
       } catch (error) {
         data.logger.error(error);
         data.response = error;
       }
       data.runHandler = true;
-      data.logger.timeEnd('RunHandler', '[RunHandler] end %o', data);
+      data.logger.timeEnd('RunHandler', '[RunHandler] end %o', data.response);
     } else {
       data.logger.warn('[RunHandler] handler has been run');
     }
