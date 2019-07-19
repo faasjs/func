@@ -114,7 +114,10 @@ export class Func {
 
     this.plugins = config.plugins || [];
     this.plugins.push(new RunHandler());
-    this.config = Object.create(null);
+    this.config = {
+      providers: {},
+      plugins: {}
+    };
 
     this.mounted = false;
     this.cachedFunctions = Object.create(null);
