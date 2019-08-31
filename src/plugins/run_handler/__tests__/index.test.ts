@@ -15,13 +15,15 @@ describe('plugins.runHandler', function () {
   });
 
   test('throw error', async function () {
-    const res = await new Func({
-      plugins: [new RunHandler()],
-      handler () {
-        throw Error('wrong');
-      }
-    }).export().handler(0);
-
-    expect(res).toEqual(Error('wrong'));
+    try {
+      await new Func({
+        plugins: [new RunHandler()],
+        handler () {
+          throw Error('wrong');
+        }
+      }).export().handler(0);
+    } catch (error) {
+      expect(error).toEqual(Error('wrong'));
+    }
   });
 });

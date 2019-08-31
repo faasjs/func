@@ -24,7 +24,11 @@ describe('handler', function () {
         }
       }).export().handler;
 
-      expect(await handler({}, {})).toEqual(Error('Error'));
+      try {
+        await handler({}, {});
+      } catch (error) {
+        expect(error).toEqual(Error('Error'));
+      }
     });
   });
 });

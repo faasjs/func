@@ -240,6 +240,10 @@ export class Func {
         await this.invoke(data);
         this.logger.timeEnd('invoke', 'invoked');
 
+        if (data.response instanceof Error) {
+          throw data.response;
+        }
+
         return data.response;
       }
     };

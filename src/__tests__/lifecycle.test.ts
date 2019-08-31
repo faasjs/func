@@ -77,9 +77,11 @@ describe('lifecycle', function () {
         handler: () => 1
       });
 
-      const res = await func.export().handler(null);
-
-      expect(res.message).toEqual('Cannot read property \'headers\' of null');
+      try {
+        await func.export().handler(null);
+      } catch (error) {
+        expect(error.message).toEqual('Cannot read property \'headers\' of null');
+      }
     });
   });
 });
