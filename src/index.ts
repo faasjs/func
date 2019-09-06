@@ -188,8 +188,8 @@ export class Func {
       this.logger.time('mount');
       await this.compose('onMount')(data);
       this.mounted = true;
-      this.logger.timeEnd('mount', 'mounted');
     } catch (error) {
+      this.logger.timeEnd('mount', 'mounted');
       throw error;
     }
   }
@@ -225,6 +225,18 @@ export class Func {
       handler: async (event: any, context?: any, callback?: (...args: any) => any) => {
         this.logger.debug('event: %o', event);
         this.logger.debug('context: %o', context);
+
+        if (typeof context === 'undefined') {
+          context = {};
+        }
+
+        if (!context.request_id) {
+          context.request_id = new Date().getTime().toString();
+        }
+
+        if (!context.request_at) {
+          context.request_at = Math.round(new Date().getTime() / 1000);
+        }
 
         const data: InvokeData = {
           event,
