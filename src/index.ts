@@ -3,6 +3,7 @@ import RunHandler from './plugins/run_handler/index';
 
 export type Handler = (data: InvokeData) => any;
 export type Next = () => Promise<void>;
+export type ExportedHandler = (event: any, context?: any, callback?: (...args: any) => any) => Promise<any>;
 
 export interface DeployData {
   root: string;
@@ -213,6 +214,7 @@ export class Func {
     } catch (error) {
       // 执行异常时回传异常
       this.logger.error(error);
+      // eslint-disable-next-line require-atomic-updates
       data.response = error;
     }
   }
@@ -220,7 +222,9 @@ export class Func {
   /**
    * 创建触发函数
    */
-  public export () {
+  public export (): {
+    handler: ExportedHandler;
+  } {
     return {
       handler: async (event: any, context?: any, callback?: (...args: any) => any) => {
         this.logger.debug('event: %o', event);

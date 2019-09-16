@@ -80,6 +80,7 @@ describe('plugins', function () {
         results.push('before1');
         data.response += 'before1';
         await next();
+        // eslint-disable-next-line require-atomic-updates
         data.response += 'after1';
         results.push('after1');
       }
@@ -90,6 +91,7 @@ describe('plugins', function () {
         results.push('before2');
         data.response += 'before2';
         await next();
+        // eslint-disable-next-line require-atomic-updates
         data.response += 'after2';
         results.push('after2');
       }
