@@ -21,8 +21,6 @@
 | config | <code>object</code> | 配置项 |
 | config.plugins | <code>Array.&lt;Plugin&gt;</code> | 插件 |
 | config.handler | <code>Handler</code> | 业务函数 |
-| config.builder | <code>object</code> | 构建配置项 |
-| config.deployer | <code>object</code> | 部署配置项 |
 
 <a name="Func+deploy"></a>
 

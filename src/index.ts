@@ -5,31 +5,42 @@ export type Handler = (data: InvokeData) => any;
 export type Next = () => Promise<void>;
 export type ExportedHandler = (event: any, context?: any, callback?: (...args: any) => any) => Promise<any>;
 
+export interface Plugin {
+  type: string;
+  name?: string;
+  onDeploy?: (data: DeployData, next: Next) => void;
+  onMount?: (data: MountData, next: Next) => void;
+  onInvoke?: (data: InvokeData, next: Next) => void;
+  [key: string]: any;
+}
+
+export interface Config {
+  providers: {
+    [key: string]: {
+      type: string;
+      config: {
+        [key: string]: any;
+      };
+    };
+  };
+  plugins: {
+    [key: string]: {
+      provider?: string;
+      type: string;
+      config?: {
+        [key: string]: any;
+      };
+      [key: string]: any;
+    };
+  };
+  [key: string]: any;
+}
 export interface DeployData {
   root: string;
   filename: string;
   env?: string;
   name?: string;
-  config?: {
-    providers: {
-      [key: string]: {
-        type: string;
-        config: {
-          [key: string]: any;
-        };
-      };
-    };
-    plugins: {
-      [key: string]: {
-        provider?: string;
-        type: string;
-        config?: {
-          [key: string]: any;
-        };
-        [key: string]: any;
-      };
-    };
-  };
+  config?: Config;
   version?: string;
   dependencies?: {
     [name: string]: string;
@@ -51,9 +62,7 @@ export interface DeployData {
 }
 
 export interface MountData {
-  config: {
-    [key: string]: any;
-  };
+  config: Config;
   event: any;
   context: any;
   [key: string]: any;
@@ -66,31 +75,20 @@ export interface InvokeData {
   response: any;
   logger: Logger;
   handler: Handler;
-  config: {
-    [key: string]: any;
-  };
+  config: Config;
   [key: string]: any;
 }
 
-export interface Plugin {
-  type: string;
-  name?: string;
-  onDeploy?: (data: DeployData, next: Next) => void;
-  onMount?: (data: MountData, next: Next) => void;
-  onInvoke?: (data: InvokeData, next: Next) => void;
-  [key: string]: any;
-}
+export type LifeCycleKey = 'onBuild' | 'onDeploy' | 'onMount' | 'onInvoke';
 
 export class Func {
   public plugins: Plugin[];
   public handler: Handler;
   public logger: Logger;
-  public config: {
-    [key: string]: any;
-  }
+  public config: Config;
   private mounted: boolean;
   private cachedFunctions: {
-    [key: string]: ((...args: any) => any)[];
+    [key in LifeCycleKey]: ((...args: any) => any)[];
   }
   [key: string]: any;
 
@@ -99,8 +97,6 @@ export class Func {
    * @param config {object} 配置项
    * @param config.plugins {Plugin[]} 插件
    * @param config.handler {Handler} 业务函数
-   * @param config.builder {object} 构建配置项
-   * @param config.deployer {object} 部署配置项
    */
   constructor (config: {
     plugins?: Plugin[];
@@ -116,26 +112,26 @@ export class Func {
     this.plugins = config.plugins || [];
     this.plugins.push(new RunHandler());
     this.config = {
-      providers: {},
-      plugins: {}
+      providers: Object.create(null),
+      plugins: Object.create(null)
     };
 
     this.mounted = false;
     this.cachedFunctions = Object.create(null);
   }
 
-  public compose (key: 'onBuild' | 'onDeploy' | 'onMount' | 'onInvoke') {
+  public compose (key: LifeCycleKey) {
     let list: ((...args: any) => any)[] = [];
 
-    if (this.cachedFunctions[key as string]) {
-      list = this.cachedFunctions[key as string];
+    if (this.cachedFunctions[key as LifeCycleKey]) {
+      list = this.cachedFunctions[key as LifeCycleKey];
     } else {
       for (const plugin of this.plugins) {
-        if (typeof plugin[key as string] === 'function') {
-          list.push(plugin[key as string].bind(plugin));
+        if (typeof plugin[key as LifeCycleKey] === 'function') {
+          list.push(plugin[key as LifeCycleKey].bind(plugin));
         }
       }
-      this.cachedFunctions[key as string] = list;
+      this.cachedFunctions[key as LifeCycleKey] = list;
     }
 
     return function (data: any, next?: () => void) {
@@ -180,7 +176,7 @@ export class Func {
   }) {
     this.logger.debug('onMount');
     if (this.mounted) {
-      this.logger.warn('mount() called multiple times');
+      this.logger.warn('mount() has been called, skipped.');
       return;
     }
 
