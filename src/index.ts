@@ -252,7 +252,7 @@ export class Func {
         await this.invoke(data);
         this.logger.timeEnd('invoke', 'invoked');
 
-        if (data.response instanceof Error) {
+        if (data.response instanceof Error || data.response.constructor.name === 'Error') {
           throw data.response;
         }
 
