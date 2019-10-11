@@ -79,7 +79,7 @@ export interface InvokeData {
   [key: string]: any;
 }
 
-export type LifeCycleKey = 'onBuild' | 'onDeploy' | 'onMount' | 'onInvoke';
+export type LifeCycleKey = 'onDeploy' | 'onMount' | 'onInvoke';
 
 export class Func {
   public plugins: Plugin[];
@@ -252,7 +252,7 @@ export class Func {
         await this.invoke(data);
         this.logger.timeEnd('invoke', 'invoked');
 
-        if (data.response instanceof Error || data.response.constructor.name === 'Error') {
+        if (typeof data.response !== 'undefined' && (data.response instanceof Error || data.response.constructor.name === 'Error')) {
           throw data.response;
         }
 
